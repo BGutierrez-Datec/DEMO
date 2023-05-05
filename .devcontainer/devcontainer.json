@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
+{
+	"name": "C# (.NET) and PostgreSQL",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"forwardPorts": [
+		5000,
+		5001,
+		5432
+	],
+	"portsAttributes": {
+		"5001": {
+			"protocol": "https"
+		}
+	},
+	"postCreateCommand": "dotnet --info"
+}

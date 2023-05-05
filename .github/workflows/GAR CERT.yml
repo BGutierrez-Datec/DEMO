@@ -1,0 +1,32 @@
+﻿name: GAR CERT
+
+on:
+  push:
+    branches:
+      - "cert"
+
+env:
+  GAR_LOCATION: southamerica-west1-docker.pkg.dev # Artifact Registry location
+  PROJECT_ID: proyecto-egx # Google Cloud project id
+  REPO_NAME: cert # Repository name
+  APP_NAME: demo # service name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: cert
+
+      - name: Login to GAR # Authenticate Docker to Google Cloud Artifact Registry
+        uses: docker/login-action@v2
+        with:
+          registry: "${{ env.GAR_LOCATION }}"
+          username: _json_key
+          password: ${{ secrets.GAR_JSON_KEY }}
+
+      - name: Build and Push Container
+        run: |-
+          docker build -t "${{ env.GAR_LOCATION }}/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.APP_NAME }}:${{ github.sha }}" --push ./
